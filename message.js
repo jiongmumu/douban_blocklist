@@ -16,20 +16,26 @@
 
         init: function() {
             this.getBlockList();
+            this.removeSaying();
             this.removeBlockUserBroadcast();
         },
 
         getBlockList: function() {
-            var $blockDom = $(this.html).find('.obu');
-            var tempArr = [];
+            // Add more people you want to stop in this list.
+            this.blockList = ['168649262'];
+        },
 
-            $blockDom.each(function() {
-                var userReg = /people\/(.+)\//;
-                var user = $(this).find('dd').find('a').attr('href');
-                tempArr.push(user.match(userReg)[1]);
+        removeSaying: function() {
+            //new-status status-wrapper    saying
+            var $repost = $('.stream-items').find('.new-status');
+            var blockList = this.blockList;
+            $repost.each(function() {
+                var userReg = /people\/(.+)\/status/;
+                var user = $(this).attr('data-uid');
+                if (blockList.indexOf(user) !== -1) {
+                    $(this).remove();
+                }
             });
-
-            this.blockList = tempArr;
         },
 
         removeBlockUserBroadcast: function() {
